@@ -146,12 +146,16 @@
             margin: 0;
         }
 
-        .hour {
+        .hour, .date {
             font-size: 35px;
             display: block;
             color: #43A047;
-            margin: 10px 0;
+            margin: 5px 0;
             font-weight: bold;
+        }
+
+        .hour {
+            font-size: 30px !important;
         }
 
         .nomargin {
@@ -184,6 +188,7 @@
 
             <p class="address">Av. Philadelpho Manoel Gouveia Neto, 29</p>
 
+            <span class="date">20/11/2022</span>
             <span class="hour">09:00h</span>
 
             <h5 class="test mb-3">Exame de Hemograma Completo</h5>
@@ -195,7 +200,7 @@
             </div>
 
 
-            <a target="_blank" href="https://www.hcor.com.br/area-medica/wp-content/uploads/sites/3/2017/04/RequisicaodeExamesLaboratoriais.pdf" class="code">Link do QR CODE</a>
+            <a target="_blank" href="https://drive.google.com/file/d/1pHydbV5o7dofR8oyNUIayA1hMd2Ato0c/view?usp=share_link" class="code">Link do QR CODE</a>
         </div>
     </div>
 

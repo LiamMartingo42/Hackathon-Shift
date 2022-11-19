@@ -19,10 +19,6 @@
             font-family: 'Poppins';
         }
 
-        body {
-            padding: 30px;
-        }
-
 
         .display-3 {
             color: #000;
@@ -45,6 +41,10 @@
         #submitButtons {
             text-align: right !important;
         }
+
+        .padding {
+            padding: 30px;
+        }
     </style>
 
     <link rel="stylesheet" href="../css/loader.css">
@@ -57,6 +57,8 @@
         <span class="loader"></span>
     </div>
 
+    <div class="padding">
+
     <header class="text-center">
         <div class="text-start d-flex justify-center align-items-center ">
             <img class="img-fluid logotipo" alt="logotipo" src="../img/hospitalLogo.png">
@@ -65,13 +67,18 @@
         <h3 class="display-6">
             Seja Bem-Vindo Liam
         </h3>
+
+
+        <a class="botao absolute" href="../fila/fila.php" target="_blank">
+            Visualizar Fila
+        </a>
     </header>
 
     <!-- Button trigger modal -->
     <div class="text-center my-4">
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgendamento">
-        Cadastrar novo Agendamento
-    </button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgendamento">
+            Cadastrar novo Agendamento
+        </button>
     </div>
 
     <!-- Modal -->
@@ -124,8 +131,8 @@
                             </div>
 
                             <div class="form-check">
-                                <input type="radio" class="form-check-input" id="agendamentoFila" name="agendamentoFila">
-                                <label class="form-check-label" for="agendamentoFila">Agendamento por Fila</label>
+                                <input type="radio" class="form-check-input" id="exameRotina" name="exameRotina">
+                                <label class="form-check-label" for="exameRotina">Exame de Rotina</label>
                             </div>
 
                         </div>
@@ -140,12 +147,12 @@
                         <div class="row">
                             <div class="form-group col">
                                 <label for="Data" class="form-label">Data do Exame:</label>
-                                <input name="Data" id="date" class="form-control" type="date" required />
+                                <input name="Data" id="inputDate" class="form-control" type="date" required />
                             </div>
 
                             <div class="form-group col ms-5">
                                 <label for="Data" class="form-label">Horário do Exame:</label>
-                                <input name="Data" id="date" class="form-control" type="time" required />
+                                <input name="Data" id="inputHour" class="form-control" type="time" required />
                             </div>
                         </div>
 
@@ -160,9 +167,11 @@
     </div>
 
 
-    <h3>Fila Atual</h3>
+    <h3 class="mb-5">Fila Atual</h3>
+    <hr>
     <table id="displayContacts" class="table"></table>
 
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
     <script src="../js/loader.js"></script>
@@ -180,57 +189,106 @@
         }
 
         var contacts = [];
-        contacts.push(new Contact("João Augusto", "17 99922-2313"));
-        contacts.push(new Contact("Lucas Eduardo", "21 93844-5493"));
-        contacts.push(new Contact("Marcos Martins", "17 98374-3048"));
-        contacts.push(new Contact("Alexandre Garcia", "17 98748-9834"));
-        contacts.push(new Contact("Diego de Souza", "17 99093-0349"));
-        contacts.push(new Contact("Larissa Manoela Fernanda", "21 93433-4034"));
+        contacts.push(new Contact("João Augusto", "(17) 99922-2313", "Coleta de material"));
+        contacts.push(new Contact("Lucas Eduardo", "(17) 93844-5493", "Aplicação de Vacina Grave"));
+        contacts.push(new Contact("Marcos Martins", "(17) 98374-3048", "Entrega de Material"));
+        contacts.push(new Contact("Alexandre Garcia", "(17) 98748-9834", "Entrega de Material"));
+        contacts.push(new Contact("Diego de Souza", "(17) 99093-0349", "Aplicação de Vacina Comum"));
+        contacts.push(new Contact("Larissa Manoela Fernanda", "(17) 93433-4034", "Coleta de Material"));
 
         var listContacts = function() {
             document.getElementById('displayContacts').innerHTML = " ";
             for (var i = 0; i < contacts.length; i++) {
-                document.getElementById('displayContacts').innerHTML += '<tr><td id="name' + i + '">' + contacts[i].name + '</td><td id="email' + i + '">' + contacts[i].email + '</td><td id="phone' + i + '">' + contacts[i].phone + '</td><td><button class="btn btn-warning" onclick=updateContact(' + i + ')>Update</button></div><button class="btn btn-danger" onclick=deleteContact(' + i + ')>Delete</button></td></tr>';
+                document.getElementById('displayContacts').innerHTML += '<tr><td id="name' + i + '">' + contacts[i].name + '</td><td id="exam' + i + '">' + contacts[i].exam + '</td><td id="phone' + i + '">' + contacts[i].phone + '</td><td><button class="btn btn-danger" onclick=deleteContact(' + i + ')>Remover</button></td></tr>';
             }
         }
 
         var addNewContact = function() {
             var name = document.getElementById('inputName').value;
-            var email = document.getElementById('inputEmail').value;
             var phone = document.getElementById('inputPhone').value;
-            var contact = new Contact(name, email, phone);
+
+            if (exameImagem.checked) {
+                var exame = 'Realização de Procedimento de Imagem';
+            }
+
+            if (coletaMaterial.checked) {
+                var exame = 'Coleta de Material';
+            }
+
+            if (vacinasGraves.checked) {
+                var exame = 'Aplicação de Vacina Grave';
+            }
+
+            if (entregaMaterial.checked) {
+                var exame = 'Entrega de Material';
+            }
+
+            if (vacinasNaoGraves.checked) {
+                var exame = 'Aplicação de Vacina Comum';
+            }
+
+            if (exameRotina.checked) {
+                var exame = 'Exame de Rotina';
+            }
+
+
+            var contact = new Contact(name, phone, exame);
             contacts.push(contact);
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Uhul !!!',
+                text: 'Agendamento Concluído!'
+            })
+
             listContacts();
+
+            limparCampos();
         }
 
         var deleteContact = function(i) {
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Até a Próxima!',
+                text: 'Agendamento Removido!'
+            })
+
             contacts.splice(i, 1);
-            listContacts();
-        }
-
-        var updateContact = function(i) {
-            contactId = i;
-            document.getElementById("inputName").value = contacts[i].name;
-            document.getElementById("inputEmail").value = contacts[i].email;
-            document.getElementById("inputPhone").value = contacts[i].phone;
-            document.getElementById("submitButtons").innerHTML = '<button id="updateButton" class="btn btn-warning" onclick=submitUpdatedContact(contactId)>Submit</button>';
-
-        }
-
-        var submitUpdatedContact = function(i) {
-            contacts[i].name = document.getElementById("inputName").value;
-            contacts[i].email = document.getElementById("inputEmail").value;
-            contacts[i].phone = document.getElementById("inputPhone").value;
-
-            document.getElementById("inputName").value = "";
-            document.getElementById("inputEmail").value = "";
-            document.getElementById("inputPhone").value = "";
-
             listContacts();
         }
 
 
         listContacts();
+
+        function limparCampos() {
+            document.getElementById('inputName').value = '';
+            document.getElementById('inputPhone').value = '';
+            document.getElementById('inputDate').value = '';
+            document.getElementById('inputHour').value = '';
+        }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js" integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+    <script>
+        // MASK CNPJ SCRIPTS
+
+        var newPhone = $("#inputPhone");
+        // cep.mask('99999-999', {reverse: true});
+        console.log(inputPhone);
+
+        $('#inputPhone').mask('(00) 0000-00009');
+        $('#inputPhone').blur(function(event) {
+            if ($(this).val().length == 15) { // Celular com 9 dígitos   2 dígitos DDD e 4 da máscara
+                $('#inputPhone').mask('(00) 00000-0009');
+            } else {
+                $('#inputPhone').mask('(00) 0000-00009');
+            }
+        });
     </script>
 
 
